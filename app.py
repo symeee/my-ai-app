@@ -28,7 +28,15 @@ input_df = pd.DataFrame([{
 if st.button("Predict"):
     prediction = model.predict(input_df)[0]
     probability = model.predict_proba(input_df)[0][1]
+st.subheader("Feature Importances")
 
+importance_df = pd.DataFrame({
+    "feature": model.feature_names_in_,
+    "importance": model.feature_importances_
+}).sort_values("importance", ascending=False)
+
+st.dataframe(importance_df, use_container_width=True)
+st.bar_chart(importance_df.set_index("feature"))
     st.subheader("Result")
     st.write(f"Prediction: {'Won' if prediction == 1 else 'Lost'}")
     st.write(f"Win probability: {probability*100:.1f}%")
